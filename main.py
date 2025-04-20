@@ -25,22 +25,17 @@ import time
 # Load environment variables
 load_dotenv()
 
-# Debug environment variables
-print("Debug - Environment variables:")
-print(f"Current directory: {os.getcwd()}")
-print(f".env file exists: {os.path.exists('.env')}")
-print(f"All environment variables: {dict(os.environ)}")
+# Load and validate required environment variables
+required_vars = ['GOOGLE_API_KEY', 'HF_API_TOKEN']
+missing_vars = [var for var in required_vars if not os.getenv(var)]
+if missing_vars:
+    raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
 
 # Configure Gemini
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # Hugging Face configuration
 HF_API_TOKEN = os.getenv("HF_API_TOKEN")
-print(f"Debug - HF_API_TOKEN loaded: {'Yes' if HF_API_TOKEN else 'No'}")
-if HF_API_TOKEN:
-    print(f"Debug - Token length: {len(HF_API_TOKEN)}")
-    print(f"Debug - Token starts with: {HF_API_TOKEN[:4] if len(HF_API_TOKEN) > 4 else 'Too short'}")
-
 HF_API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0"
 
 # Configure Replicate
@@ -135,7 +130,6 @@ def generate_with_huggingface(prompt: str) -> dict:
     """Generate image using Hugging Face's Stable Diffusion API"""
     try:
         print("Starting Hugging Face generation...")
-        print(f"Debug - Current HF_API_TOKEN: {'Present' if HF_API_TOKEN else 'Missing'}")
         
         if not HF_API_TOKEN:
             print("Error: Hugging Face API token not found")
