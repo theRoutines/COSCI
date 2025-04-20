@@ -22,20 +22,24 @@ import urllib3
 import replicate
 import time
 
-# Load environment variables
-load_dotenv()
+# Load environment variables (only in development)
+if os.path.exists('.env'):
+    load_dotenv()
 
-# Load and validate required environment variables
-required_vars = ['GOOGLE_API_KEY', 'HF_API_TOKEN']
-missing_vars = [var for var in required_vars if not os.getenv(var)]
-if missing_vars:
-    raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
+# Load environment variables with fallbacks
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+HF_API_TOKEN = os.getenv("HF_API_TOKEN")
 
-# Configure Gemini
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+# Log missing variables without raising errors
+for var_name in ['GOOGLE_API_KEY', 'HF_API_TOKEN']:
+    if not os.getenv(var_name):
+        print(f"Warning: {var_name} not found in environment variables")
+
+# Configure services only if API keys are available
+if GOOGLE_API_KEY:
+    genai.configure(api_key=GOOGLE_API_KEY)
 
 # Hugging Face configuration
-HF_API_TOKEN = os.getenv("HF_API_TOKEN")
 HF_API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0"
 
 # Configure Replicate
