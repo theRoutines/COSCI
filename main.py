@@ -99,7 +99,8 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://d2xl67xdghvwb1.amplifyapp.com",  # Main Amplify domain
+        "https://d19hfq71y1mtyx.amplifyapp.com",  # Main Amplify domain
+        "https://staging.d19hfq71y1mtyx.amplifyapp.com",  # Staging domain
         "http://localhost:3000"  # Local development
     ],
     allow_credentials=True,
