@@ -98,7 +98,11 @@ app = FastAPI()
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://staging.d2xl67xdghvwb1.amplifyapp.com", "http://localhost:3000"],
+    allow_origins=[
+        "https://staging.d2xl67xdghvwb1.amplifyapp.com",
+        "https://main.d2xl67xdghvwb1.amplifyapp.com",  # Production URL
+        "http://localhost:3000"  # Local development
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
