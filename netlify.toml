@@ -1,0 +1,12 @@
+[build]
+  command = "pip install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --port $PORT"
+  publish = "cosci-github/backend/static"
+  functions = "cosci-github/backend"
+
+[build.environment]
+  PYTHON_VERSION = "3.11"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
