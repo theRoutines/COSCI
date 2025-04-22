@@ -27,9 +27,6 @@ import time
 # Initialize FastAPI app
 app = FastAPI()
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
 @app.get("/")
 async def serve_spa(request: Request):
     return FileResponse("static/index.html")
@@ -111,7 +108,8 @@ class Character(Base):
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # CORS middleware
 app.add_middleware(
