@@ -32,6 +32,14 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+@app.on_event("startup")
+async def startup_event():
+    logger.info("=" * 40)
+    logger.info("Server is running!")
+    logger.info(f"To access the API documentation, visit: /docs")
+    logger.info(f"To access the alternative API documentation, visit: /redoc")
+    logger.info("=" * 40)
+
 @app.get("/")
 async def serve_spa(request: Request):
     logger.info(f"Accessing root path from {request.client.host}")
