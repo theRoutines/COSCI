@@ -40,10 +40,14 @@ async def startup_event():
     logger.info(f"To access the alternative API documentation, visit: /redoc")
     logger.info("=" * 40)
 
-@app.get("/")
+from fastapi.routing import APIRoute
+
+@app.api_route("/", methods=["GET", "HEAD"])
 async def serve_spa(request: Request):
-    logger.info(f"Accessing root path from {request.client.host}")
+    logger.info(f"Accessing root path from {request.client.host} with method {request.method}")
     try:
+        if request.method == "HEAD":
+            return {"status": "API is running"}
         return FileResponse("static/index.html")
     except Exception as e:
         logger.error(f"Error serving index.html: {str(e)}")
