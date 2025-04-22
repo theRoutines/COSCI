@@ -25,11 +25,21 @@ import replicate
 import time
 
 # Initialize FastAPI app
-app = FastAPI()
+app = FastAPI(title="COSCI API", version="1.0.0")
+
+# Configure logging
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 @app.get("/")
 async def serve_spa(request: Request):
-    return FileResponse("static/index.html")
+    logger.info(f"Accessing root path from {request.client.host}")
+    try:
+        return FileResponse("static/index.html")
+    except Exception as e:
+        logger.error(f"Error serving index.html: {str(e)}")
+        return {"status": "API is running", "message": "Welcome to COSCI API"}
 
 @app.get("/{full_path:path}")
 async def serve_spa_paths(full_path: str):
